@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}{{ '编辑' if user else '新建' }}用户{% endblock %}
+{% block content %}
+<h2 class="mb-4">{{ '编辑' if user else '新建' }}用户</h2>
+<div class="card border-0 shadow-sm">
+  <div class="card-body">
+    <form method="post">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">用户名 *</label>
+          <input type="text" name="username" class="form-control" required {% if user %}readonly{% endif %} value="{{ user.username if user else '' }}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">邮箱 *</label>
+          <input type="email" name="email" class="form-control" required value="{{ user.email if user else '' }}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">密码{% if user %}（留空则不修改）{% endif %}</label>
+          <input type="password" name="password" class="form-control" {% if not user %}required{% endif %}>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">角色</label>
+          <select name="role_level" class="form-select">
+            {% for level, label in role_choices %}
+            <option value="{{ level }}" {% if user and user.role_level == level %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">所属组织</label>
+          <select name="org_id" class="form-select">
+            <option value="">无</option>
+            {% for org in orgs %}
+            <option value="{{ org.id }}" {% if user and user.org_id == org.id %}selected{% endif %}>{{ org.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        {% if user %}
+        <div class="col-md-6 d-flex align-items-end">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="is_active" id="is_active" {% if user.is_active %}checked{% endif %}>
+            <label class="form-check-label" for="is_active">账号启用</label>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+      <div class="mt-4 d-flex gap-2">
+        <button type="submit" class="btn btn-primary">保存</button>
+        <a href="{{ url_for('users.list_users') }}" class="btn btn-outline-secondary">取消</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

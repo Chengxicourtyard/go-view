@@ -1,0 +1,67 @@
+{% extends "admin/layout.html" %}
+{% block title %}院系部门{% endblock %}
+{% block admin_content %}
+<div class="page-header">
+  <div>
+    <h2 class="mb-1">院系部门管理</h2>
+    <p class="text-muted mb-0 small">维护学校 → 职能部门 → 学院的多级组织结构</p>
+  </div>
+  <a class="btn btn-primary" href="{{ url_for('admin.department_create') }}">新建部门</a>
+</div>
+
+<div class="row g-4">
+  <div class="col-12 col-lg-5">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white fw-bold">组织树</div>
+      <ul class="list-group list-group-flush">
+        {% for node in tree %}
+        <li class="list-group-item d-flex justify-content-between align-items-center" style="padding-left: {{ 16 + node.depth * 18 }}px">
+          <span>{{ node.org.name }}</span>
+          <a class="small" href="{{ url_for('admin.department_edit', org_id=node.org.id) }}">编辑</a>
+        </li>
+        {% else %}
+        <li class="list-group-item text-muted">暂无部门</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="col-12 col-lg-7">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white fw-bold">部门明细</div>
+      <div class="table-responsive">
+        <table class="table table-hover mb-0 align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>部门名称</th>
+              <th>上级</th>
+              <th>用户</th>
+              <th>账号</th>
+              <th>子部门</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in org_details %}
+            <tr>
+              <td>{{ item.org.name }}</td>
+              <td>{{ item.org.parent.name if item.org.parent else '—' }}</td>
+              <td>{{ item.user_count }}</td>
+              <td>{{ item.cred_count }}</td>
+              <td>{{ item.child_count }}</td>
+              <td class="text-nowrap">
+                <a href="{{ url_for('admin.department_edit', org_id=item.org.id) }}">编辑</a>
+                {% if item.user_count == 0 and item.cred_count == 0 and item.child_count == 0 %}
+                <form method="post" action="{{ url_for('admin.department_delete', org_id=item.org.id) }}" class="d-inline" onsubmit="return confirm('确认删除该部门？')">
+                  <button class="btn btn-link btn-sm text-danger p-0 ms-2">删除</button>
+                </form>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

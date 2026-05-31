@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="admin-mobile-nav-wrap">
+  <nav class="admin-mobile-nav" aria-label="后台菜单">
+    <a href="{{ url_for('admin.index') }}" class="nav-pill {% if request.endpoint == 'admin.index' %}active{% endif %}">概览</a>
+    <a href="{{ url_for('admin.users') }}" class="nav-pill {% if request.endpoint and request.endpoint.startswith('admin.user') %}active{% endif %}">用户</a>
+    <a href="{{ url_for('admin.departments') }}" class="nav-pill {% if request.endpoint and request.endpoint.startswith('admin.department') %}active{% endif %}">部门</a>
+    <a href="{{ url_for('admin.roles') }}" class="nav-pill {% if request.endpoint == 'admin.roles' %}active{% endif %}">角色</a>
+    <a href="{{ url_for('admin.audit_logs') }}" class="nav-pill {% if request.endpoint == 'admin.audit_logs' %}active{% endif %}">审计</a>
+  </nav>
+</div>
+
+<div class="admin-shell row g-3 g-lg-4">
+  <aside class="col-lg-3 admin-sidebar-desktop">
+    <div class="card border-0 shadow-sm admin-sidebar sticky-top">
+      <div class="card-header bg-white fw-bold">后台管理</div>
+      <div class="list-group list-group-flush">
+        <a href="{{ url_for('admin.index') }}" class="list-group-item list-group-item-action {% if request.endpoint == 'admin.index' %}active{% endif %}">管理概览</a>
+        <a href="{{ url_for('admin.users') }}" class="list-group-item list-group-item-action {% if request.endpoint and request.endpoint.startswith('admin.user') %}active{% endif %}">分级用户</a>
+        <a href="{{ url_for('admin.departments') }}" class="list-group-item list-group-item-action {% if request.endpoint and request.endpoint.startswith('admin.department') %}active{% endif %}">院系部门</a>
+        <a href="{{ url_for('admin.roles') }}" class="list-group-item list-group-item-action {% if request.endpoint == 'admin.roles' %}active{% endif %}">角色权限</a>
+        <a href="{{ url_for('admin.audit_logs') }}" class="list-group-item list-group-item-action {% if request.endpoint == 'admin.audit_logs' %}active{% endif %}">操作审计</a>
+      </div>
+      <div class="card-footer bg-white small text-muted">
+        当前身份：{{ current_user.role_name }}
+      </div>
+    </div>
+  </aside>
+  <section class="col-lg-9">
+    {% block admin_content %}{% endblock %}
+  </section>
+</div>
+{% endblock %}

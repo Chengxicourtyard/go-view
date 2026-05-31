@@ -1,0 +1,70 @@
+{% extends "admin/layout.html" %}
+{% block title %}后台管理 · {{ SITE_NAME }}{% endblock %}
+{% block admin_content %}
+<h2 class="mb-1">管理概览</h2>
+<p class="text-muted mb-4">分级用户、院系部门与平台运行状态一览</p>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3">
+    <div class="card border-0 shadow-sm stat-card"><div class="card-body">
+      <div class="text-muted small">管辖用户</div><div class="h3 mb-0">{{ stats.user_count }}</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="card border-0 shadow-sm stat-card"><div class="card-body">
+      <div class="text-muted small">启用用户</div><div class="h3 mb-0">{{ stats.active_user_count }}</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="card border-0 shadow-sm stat-card"><div class="card-body">
+      <div class="text-muted small">院系部门</div><div class="h3 mb-0">{{ stats.org_count }}</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="card border-0 shadow-sm stat-card"><div class="card-body">
+      <div class="text-muted small">系统账号</div><div class="h3 mb-0">{{ stats.cred_count }}</div>
+    </div></div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-12 col-md-5">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white fw-bold">角色分布</div>
+      <ul class="list-group list-group-flush">
+        {% for role, count in stats.role_distribution %}
+        <li class="list-group-item d-flex justify-content-between"><span>{{ role }}</span><span class="badge text-bg-primary">{{ count }}</span></li>
+        {% else %}
+        <li class="list-group-item text-muted">暂无数据</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="col-12 col-md-7">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white d-flex justify-content-between">
+        <strong>最近操作</strong>
+        <a href="{{ url_for('admin.audit_logs') }}">全部</a>
+      </div>
+      <ul class="list-group list-group-flush small">
+        {% for log in stats.recent_logs %}
+        <li class="list-group-item">
+          <span class="badge text-bg-secondary">{{ log.action }}</span>
+          {% if log.username %}<span class="text-muted">{{ log.username }}</span> · {% endif %}
+          {{ log.detail or log.resource }} · {{ log.created_at.strftime('%Y-%m-%d %H:%M') }}
+        </li>
+        {% else %}
+        <li class="list-group-item text-muted">暂无记录</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="mt-4 d-flex gap-2 flex-wrap">
+  <a class="btn btn-primary" href="{{ url_for('admin.user_create') }}">添加用户</a>
+  <a class="btn btn-outline-primary" href="{{ url_for('admin.users') }}">管理用户</a>
+  <a class="btn btn-outline-primary" href="{{ url_for('admin.department_create') }}">添加部门</a>
+  <a class="btn btn-outline-secondary" href="{{ url_for('admin.departments') }}">管理部门</a>
+</div>
+{% endblock %}

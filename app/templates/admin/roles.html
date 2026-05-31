@@ -1,0 +1,27 @@
+{% extends "admin/layout.html" %}
+{% block title %}角色权限{% endblock %}
+{% block admin_content %}
+<h2 class="mb-1">角色权限说明</h2>
+<p class="text-muted mb-4">高校平台采用 5 级角色，数字越小权限越高</p>
+<div class="card border-0 shadow-sm">
+  <div class="table-responsive">
+    <table class="table mb-0">
+      <thead class="table-light">
+        <tr><th>等级</th><th>角色</th><th>权限说明</th></tr>
+      </thead>
+      <tbody>
+        {% for i in range(matrix|length) %}
+        <tr>
+          <td>{{ i + 1 }}</td>
+          <td><strong>{{ matrix[i][0] }}</strong></td>
+          <td>{{ matrix[i][1] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="alert alert-info mt-4 mb-0">
+  院系管理员只能管理<strong>本院系及下级部门</strong>内的用户；不能创建或编辑比自己权限更高的账号。
+</div>
+{% endblock %}

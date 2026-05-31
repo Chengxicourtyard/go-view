@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}新建院系部门{% endblock %}
+{% block content %}
+<h2 class="mb-4">新建院系部门</h2>
+<div class="card border-0 shadow-sm">
+  <div class="card-body">
+    <form method="post">
+      <div class="mb-3">
+        <label class="form-label">部门名称 *</label>
+        <input type="text" name="name" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">上级部门</label>
+        <select name="parent_id" class="form-select">
+          <option value="">无（顶级）</option>
+          {% for org in parents %}
+          <option value="{{ org.id }}">{{ org.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">创建</button>
+      <a href="{{ url_for('orgs.list_orgs') }}" class="btn btn-outline-secondary">取消</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

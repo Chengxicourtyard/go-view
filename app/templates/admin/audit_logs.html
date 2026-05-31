@@ -1,0 +1,48 @@
+{% extends "admin/layout.html" %}
+{% block title %}操作审计{% endblock %}
+{% block admin_content %}
+<h2 class="mb-4">操作审计</h2>
+<div class="card border-0 shadow-sm">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0 small">
+      <thead class="table-light">
+        <tr>
+          <th>时间</th>
+          <th>操作</th>
+          <th>资源</th>
+          <th>详情</th>
+          <th>操作人</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for log in logs %}
+        <tr>
+          <td>{{ log.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+          <td><span class="badge text-bg-secondary">{{ log.action }}</span></td>
+          <td>{{ log.resource }}</td>
+          <td>{{ log.detail or '—' }}</td>
+          <td>{{ log.username or '—' }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" class="text-center text-muted py-4">暂无审计记录</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if pagination.pages > 1 %}
+  <div class="card-footer bg-white">
+    <nav>
+      <ul class="pagination pagination-sm mb-0">
+        {% if pagination.has_prev %}
+        <li class="page-item"><a class="page-link" href="{{ url_for('admin.audit_logs', page=pagination.prev_num) }}">上一页</a></li>
+        {% endif %}
+        <li class="page-item disabled"><span class="page-link">{{ pagination.page }} / {{ pagination.pages }}</span></li>
+        {% if pagination.has_next %}
+        <li class="page-item"><a class="page-link" href="{{ url_for('admin.audit_logs', page=pagination.next_num) }}">下一页</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

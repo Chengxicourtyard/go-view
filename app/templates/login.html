@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}登录{% endblock %}
+{% block content %}
+<div class="login-page">
+<div class="row justify-content-center w-100">
+  <div class="col-12 col-sm-10 col-md-6 col-lg-5">
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-4">
+        <h3 class="mb-4">登录</h3>
+        <form method="post" id="login-form">
+          <div class="mb-3">
+            <label class="form-label">用户名</label>
+            <input type="text" name="username" class="form-control" required autofocus autocomplete="username">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">密码</label>
+            <input type="password" name="password" class="form-control" required autocomplete="current-password">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">验证码</label>
+            <div class="input-group captcha-group">
+              <span class="input-group-text captcha-display p-0 border-end-0" id="captcha-box" aria-hidden="true">{{ captcha_code }}</span>
+              <input type="text" name="captcha" class="form-control" required maxlength="6" pattern="\d+" inputmode="numeric" placeholder="请输入右侧数字" autocomplete="off">
+              <button type="button" class="btn btn-outline-secondary" id="refresh-captcha" title="换一张">刷新</button>
+            </div>
+            <div class="form-text">请输入验证码中的数字</div>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">进入系统</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+document.getElementById('refresh-captcha')?.addEventListener('click', async function () {
+  const res = await fetch('{{ url_for("auth.refresh_captcha") }}');
+  const data = await res.json();
+  document.getElementById('captcha-box').textContent = data.captcha;
+  document.querySelector('[name=captcha]').value = '';
+  document.querySelector('[name=captcha]').focus();
+});
+</script>
+{% endblock %}

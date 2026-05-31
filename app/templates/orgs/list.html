@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}院系部门{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h2 class="mb-1">院系部门</h2>
+    <p class="text-muted mb-0 small">学校 → 职能部门 → 学院的组织架构</p>
+  </div>
+  <a class="btn btn-primary" href="{{ url_for('orgs.create') }}">新建部门</a>
+</div>
+<div class="row g-4">
+  <div class="col-md-5">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white"><strong>组织树</strong></div>
+      <ul class="list-group list-group-flush">
+        {% for node in tree %}
+        <li class="list-group-item" style="padding-left: {{ 16 + node.depth * 20 }}px">
+          {{ node.org.name }}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="col-md-7">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white"><strong>全部组织</strong></div>
+      <div class="table-responsive">
+        <table class="table mb-0">
+          <thead><tr><th>名称</th><th>上级组织</th></tr></thead>
+          <tbody>
+            {% for org in orgs %}
+            <tr>
+              <td>{{ org.name }}</td>
+              <td>{{ org.parent.name if org.parent else '—' }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

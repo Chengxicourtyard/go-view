@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}首页 · {{ SITE_NAME }}{% endblock %}
+{% block content %}
+<div class="row align-items-center home-hero">
+  <div class="col-lg-7">
+    <p class="text-primary fw-semibold mb-2">高校信息化 · 账号集中管理</p>
+    <h1 class="display-5 fw-bold">高校信息系统账号管理平台</h1>
+    <p class="lead text-muted mt-3">
+      统一管理教务、学工、财务、OA、VPN 等校内系统的账号与密码，按院系部门分级授权，满足高校多部门协同与信息安全要求。
+    </p>
+    <div class="d-flex gap-2">
+      <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg">登录平台</a>
+    </div>
+    <div class="card mt-4 border-0 shadow-sm">
+      <div class="card-body">
+        <h6 class="text-muted">演示账号</h6>
+        <ul class="mb-0 small">
+          <li>系统管理员（信息中心）：<code>admin</code> / <code>admin123</code></li>
+          <li>科室负责人（信息中心）：<code>it_manager</code> / <code>manager123</code> — 可添加记录，仅见本人数据</li>
+          <li>教务处负责人：<code>jwc_manager</code> / <code>manager123</code></li>
+          <li>普通教职工：<code>staff</code> / <code>staff123</code></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="card shadow-sm border-0 uni-feature-card">
+      <div class="card-body">
+        <h5>高校场景特性</h5>
+        <ul class="mb-0">
+          <li>记录字段：系统名称、账户、密码、网址、使用部门、备注、更新时间</li>
+          <li>院系部门树：学校 → 职能部门 → 学院</li>
+          <li>5 级角色：系统管理员 → 只读用户</li>
+          <li>密码加密存储与操作审计</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
